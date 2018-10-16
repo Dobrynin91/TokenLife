@@ -10,28 +10,31 @@ import java.io.IOException;
 public class GetToken {
   private static RequestGet service;
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws InterruptedException {
 
     Retrofit retrofit = new Retrofit.Builder()
             .baseUrl("https://iiko.biz:9900/api/0/")
             .build();
     service = retrofit.create(RequestGet.class);
-    System.out.println("The token is " + getToken());
+    String token = getToken();
+    System.out.println("The token is " + token);
     DateTime d1 = new DateTime();
     if (getToken() != null) {
-      while (true) {
-        String info = getOrganization(getToken());
-        if (info.contains("Рабоче-Крестьянская,")) {
-          continue;
+      try {
+        while (getOrganization(token).contains("Рабоче-Крестьянская,")) {
+          String info = getOrganization(token);
+          System.out.println(info);
+          Thread.sleep(60000);
         }
+      } catch (NullPointerException e) {
+        DateTime d2 = new DateTime();
+        int difTime = Minutes.minutesBetween(d2, d1).getMinutes();
+        System.out.println("The token lives is " + difTime + " minutes");
       }
     }
-    DateTime d2 = new DateTime();
-    int difTime = Minutes.minutesBetween(d2, d1).getMinutes();
-    System.out.println("The token lives is " + difTime);
   }
 
-  public static String getToken() {
+  private static String getToken() {
     Call<ResponseBody> auth = service.callAuth("SovyNezhnye_API", "m2jbp3SpVw4B");
     try {
       Response<ResponseBody> response = auth.execute();
@@ -43,7 +46,7 @@ public class GetToken {
     return null;
   }
 
-  public static String getOrganization(String token) {
+  private static String getOrganization(String token) {
     Call<ResponseBody> organization = service.callOrganization(token, 10000);
     try {
       Response<ResponseBody> response = organization.execute();
