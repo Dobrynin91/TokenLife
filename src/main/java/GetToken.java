@@ -19,18 +19,16 @@ public class GetToken {
     String token = getToken();
     System.out.println("The token is " + token);
     DateTime d1 = new DateTime();
-    if (getToken() != null) {
-      try {
-        while (getOrganization(token).contains("Рабоче-Крестьянская,")) {
-          String info = getOrganization(token);
-          System.out.println(info);
-          Thread.sleep(60000);
-        }
-      } catch (NullPointerException e) {
-        DateTime d2 = new DateTime();
-        int difTime = Minutes.minutesBetween(d1, d2).getMinutes();
-        System.out.println("The token lives " + difTime + " minutes");
+    if (token != null) {
+      String info = getOrganization(token);
+      while (info != null) {
+        Thread.sleep(60000);
+        info = getOrganization(token);
+        System.out.println(info);
       }
+      DateTime d2 = new DateTime();
+      int difTime = Minutes.minutesBetween(d1, d2).getMinutes();
+      System.out.println("The token lives " + difTime + " minutes");
     }
   }
 
