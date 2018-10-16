@@ -28,8 +28,8 @@ public class GetToken {
         }
       } catch (NullPointerException e) {
         DateTime d2 = new DateTime();
-        int difTime = Minutes.minutesBetween(d2, d1).getMinutes();
-        System.out.println("The token lives is " + difTime + " minutes");
+        int difTime = Minutes.minutesBetween(d1, d2).getMinutes();
+        System.out.println("The token lives " + difTime + " minutes");
       }
     }
   }
