@@ -36,8 +36,11 @@ public class GetToken {
     Call<ResponseBody> auth = service.callAuth("SovyNezhnye_API", "m2jbp3SpVw4B");
     try {
       Response<ResponseBody> response = auth.execute();
-      String responseBody = response.body().string().replace("\"", "");
-      return responseBody;
+      String responseBody;
+      if (response.body() != null) {
+        responseBody = response.body().string().replace("\"", "");
+        return responseBody;
+      }
     } catch (IOException e) {
       System.out.println("getToken exception is " + e);
     }
@@ -48,10 +51,13 @@ public class GetToken {
     Call<ResponseBody> organization = service.callOrganization(token, 10000);
     try {
       Response<ResponseBody> response = organization.execute();
-      String responseBody = response.body().string();
-      return responseBody;
+      String responseBody;
+      if (response.body() != null) {
+        responseBody = response.body().string();
+        return responseBody;
+      }
     } catch (IOException e) {
-      System.out.println("getOrganization xception is " + e);
+      System.out.println("getOrganization exception is " + e);
     }
     return null;
   }
